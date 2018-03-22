@@ -72,12 +72,10 @@ class KNearestNeighbor(object):
         # Compute the l2 distance between the ith test point and the jth    #
         # training point, and store the result in dists[i, j]. You should   #
         # not use a loop over dimension.                                    #
-        #####################################################################\
-        #distance = np.linalg.norm(num_test[i] - num_train[j]);
-        # compute_distances_two_loops.np.linalg.norm(num_test[i] - num_train[j])
-
+        #####################################################################
         
         dists[i, j] = int(np.linalg.norm(X[i] - self.X_train[j]));
+        
         #####################################################################
         #                       END OF YOUR CODE                            #
         #####################################################################
