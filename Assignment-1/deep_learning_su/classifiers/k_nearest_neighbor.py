@@ -157,7 +157,7 @@ class KNearestNeighbor(object):
       # neighbors. Store these labels in closest_y.                           #
       # Hint: Look up the function numpy.argsort.                             #
       #########################################################################
-      pass
+      closestKNeighbours = dists[i].argsort()[:k]
       #########################################################################
       # TODO:                                                                 #
       # Now that you have found the labels of the k nearest neighbors, you    #
@@ -165,7 +165,21 @@ class KNearestNeighbor(object):
       # Store this label in y_pred[i]. Break ties by choosing the smaller     #
       # label.                                                                #
       #########################################################################
-      pass
+      #transform closestKNeibours Id's to lables
+      
+      #Tried to map apply a function to each element of closestKNeighbours...
+      #toLabel = lambda t: self.y_train[t]
+      #toLabel(closestKNeighbours)
+      
+      closestKNeighboursLabes = np.zeros(closestKNeighbours.shape[0]).astype(int)
+      for j in xrange(closestKNeighbours.shape[0]):
+          closestKNeighboursLabes[j] = self.y_train[closestKNeighbours[j]] 
+      
+      #Getting the most frequently occuring label
+      counts = np.bincount(closestKNeighboursLabes)
+      mostOccurentLabel = np.argmax(counts)
+        
+      y_pred[i] = mostOccurentLabel
       #########################################################################
       #                           END OF YOUR CODE                            # 
       #########################################################################
