@@ -74,8 +74,12 @@ class KNearestNeighbor(object):
         # not use a loop over dimension.                                    #
         #####################################################################
         
-        dists[i, j] = int(np.linalg.norm(X[i] - self.X_train[j]));
+        #Used this at first, but it doesn't produce the same result as the sum of
+        # squares and it throws memory exception when used on one_loops
+        #dists[i, j] = int(np.linalg.norm(self.X_train[j, :] - X[i, :]));
         
+        dists[i, j] = np.sqrt(np.sum(np.square(self.X_train[j, :] - X[i, :])))
+
         #####################################################################
         #                       END OF YOUR CODE                            #
         #####################################################################
@@ -97,7 +101,18 @@ class KNearestNeighbor(object):
       # Compute the l2 distance between the ith test point and all training #
       # points, and store the result in dists[i, :].                        #
       #######################################################################
-      pass
+      dists[i, :] = np.sqrt(np.sum(np.square(self.X_train - X[i, :]), axis = 1))
+      
+      #Tried a few others, but they produced a different result than the two_loops version.
+    
+      #dists[i] = np.sqrt(np.sum(np.square(X[i] - self.X_train), axis=1))
+      
+      #dists[i, :] = np.linalg.norm(X[:, np.newaxis] - self.X_train, axis = 2);
+      
+      #aSumSquare = np.sum(np.square(X),axis=1);
+      #bSumSquare = np.sum(np.square(self.X_train),axis=1);
+      #mul = np.dot(X,self.X_train.T);
+      #dists = np.sqrt(aSumSquare[:,np.newaxis]+bSumSquare-2*mul)
       #######################################################################
       #                         END OF YOUR CODE                            #
       #######################################################################
@@ -125,7 +140,10 @@ class KNearestNeighbor(object):
     # HINT: Try to formulate the l2 distance using matrix multiplication    #
     #       and two broadcast sums.                                         #
     #########################################################################
-    pass
+    #pass
+    test_square = np.array([np.sum(np.square(X), axis = 1)] * num_train).transpose()
+    train_square = np.array([np.sum(np.square(self.X_train), axis = 1)] * num_test)
+    dists = np.sqrt(X.dot(self.X_train.transpose()) * (-2) + test_square + train_square)
     #########################################################################
     #                         END OF YOUR CODE                              #
     #########################################################################
